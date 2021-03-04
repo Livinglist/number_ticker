@@ -38,33 +38,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final controller = NumberTickerController();
-  final controller1 = NumberTickerController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text("Number Ticker Demo"),
       ),
       body: ListView(
         children: [
-          NumberTicker(controller: controller1, initialNumber: 123, textStyle: TextStyle(fontSize: 24),),
+          NumberTicker(controller: controller, initialNumber: 123, textStyle: TextStyle(fontSize: 24),),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RaisedButton(onPressed: (){
-                controller1.number = controller1.number - 1;
+                controller.number = controller.number - 1;
               }, child: Text('-'),),
               RaisedButton(onPressed: (){
-                controller1.number = controller1.number + 1;
+                controller.number = controller.number + 1;
               }, child: Text('+'),),
               RaisedButton(onPressed: (){
-                controller1.number = controller1.number - 10;
+                controller.number = controller.number - 10;
               }, child: Text('- 10'),),
               RaisedButton(onPressed: (){
-                controller1.number = controller1.number + 10;
+                controller.number = controller.number + 10;
               }, child: Text('+ 10'),),
             ],
           ),
