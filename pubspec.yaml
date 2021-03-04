@@ -1,7 +1,6 @@
 name: number_ticker
 description: A simple number ticker for displaying changing number.
 version: 0.0.1
-author: Jiaqi Feng
 repository: https://github.com/Livinglist/number_ticker
 publish_to: https://pub.dev/
 
