@@ -2,19 +2,16 @@ library number_ticker;
 
 import 'package:flutter/material.dart';
 
+///A controller for updating the single digit displayed by [DigitTicker]
 class _DigitTickerController extends ValueNotifier {
   int _number;
 
   _DigitTickerController({int num = 0}) : super(num) {
-    assert(num <= 9 && num >= 0);
+    assert(num <= 9 && num >= 0, 'Number must be in the range of [0, 10).');
     this._number = num;
   }
 
   int get number => _number;
-
-  dispose() {
-    super.dispose();
-  }
 
   set number(int num) {
     this._number = num;
@@ -22,6 +19,7 @@ class _DigitTickerController extends ValueNotifier {
   }
 }
 
+///A widget for displaying a single digit.
 class _DigitTicker extends StatelessWidget {
   final Color color;
   final TextStyle textStyle;
@@ -32,32 +30,35 @@ class _DigitTicker extends StatelessWidget {
 
   _DigitTicker(
       {this.color = Colors.black,
-        this.controller,
-        this.textStyle,
-        this.initialNumber,
-        this.duration})
-      : scrollController =
-  ScrollController(initialScrollOffset: textStyle.fontSize* (4/3) * initialNumber),
-        assert(controller != null),
-        assert(initialNumber != null),
+      this.controller,
+      this.textStyle,
+      this.initialNumber,
+      this.duration})
+      : scrollController = ScrollController(
+            initialScrollOffset: textStyle.fontSize * (4 / 3) * initialNumber),
+        assert(controller != null, 'Controller cannot be null.'),
+        assert(initialNumber != null, 'Initial number cannot be null.'),
         assert(initialNumber <= 9),
         assert(initialNumber >= 0),
         super(key: Key(controller.toString())) {
     controller.addListener(onValueChanged);
   }
 
+  ///Scrolls to the positions of the new number.
   void onValueChanged() {
-    if (this.scrollController.positions.isNotEmpty) {
-      scrollController.animateTo(controller.number * textStyle.fontSize*(4/3),
-          duration: duration, curve: Curves.ease);
+    if (this.scrollController.hasClients) {
+      scrollController.animateTo(
+          controller.number * textStyle.fontSize * (4 / 3),
+          duration: duration,
+          curve: Curves.ease);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: textStyle.fontSize*(4/3),
-        width: textStyle.fontSize*(7/10),
+        height: textStyle.fontSize * (4 / 3),
+        width: textStyle.fontSize * (7 / 10),
         child: Stack(
           children: [
             ListView(
@@ -66,7 +67,7 @@ class _DigitTicker extends StatelessWidget {
               children: [
                 for (var i in List.generate(10, (index) => index))
                   Container(
-                    height: textStyle.fontSize*(4/3),
+                    height: textStyle.fontSize * (4 / 3),
                     child: Center(
                       child: Text("$i", style: textStyle),
                     ),
@@ -93,6 +94,7 @@ class NumberTickerController extends ValueNotifier {
   }
 }
 
+///A widget for displaying the realtime change of a number.
 class NumberTicker extends StatefulWidget {
   final Color color;
   final TextStyle textStyle;
@@ -103,14 +105,14 @@ class NumberTicker extends StatefulWidget {
 
   NumberTicker(
       {this.color = Colors.black,
-        this.controller,
-        this.textStyle = const TextStyle(color: Colors.black, fontSize: 12),
-        this.initialNumber,
-        this.duration = const Duration(milliseconds: 500),
-        this.fractionDigits = 0})
-      : assert(controller != null),
-        assert(initialNumber != null),
-        assert(duration != null) {
+      this.controller,
+      this.textStyle = const TextStyle(color: Colors.black, fontSize: 12),
+      this.initialNumber,
+      this.duration = const Duration(milliseconds: 500),
+      this.fractionDigits = 0})
+      : assert(controller != null, 'Controller cannot be null.'),
+        assert(initialNumber != null, 'Initial number cannot be null.'),
+        assert(duration != null, 'Duration cannot be null.') {
     this.controller.number = initialNumber;
   }
 
@@ -118,23 +120,36 @@ class NumberTicker extends StatefulWidget {
   _NumberTickerState createState() => _NumberTickerState();
 }
 
-class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderStateMixin{
+///The state of [NumberTicker].
+class _NumberTickerState extends State<NumberTicker>
+    with SingleTickerProviderStateMixin {
+  ///The animation controller for animating the removed or added [DigitTicker].
   AnimationController animationController;
+
+  ///The number this widget currently displaying.
   double currentNum;
+
+  ///The string representation of the [currentNum].
   String currentNumString;
-  int numLength;
+
+  ///The index of decimal point in the [currentNum].
   int decimalIndex;
+
+  ///The indicator of whether the new number is longer or shorter than the current one.
   bool shorter = false, longer = false;
+
+  ///The list of [_DigitTickerController].
   List<_DigitTickerController> digitControllers = [];
 
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
 
     var num = widget.initialNumber;
     currentNum = num;
     var numString = num.toStringAsFixed(widget.fractionDigits);
-    this.numLength = numString.length;
+
     currentNumString = numString;
 
     for (int i = 0; i < numString.length; i++) {
@@ -151,11 +166,9 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
     widget.controller.addListener(onNumberChanged);
 
     animationController.addStatusListener((status) {
-      if(status == AnimationStatus.completed){
+      if (status == AnimationStatus.completed) {
         setState(() {
-          //digitControllers.last.dispose();
-
-          if(shorter) digitControllers.removeLast();
+          if (shorter) digitControllers.removeLast();
 
           this.longer = false;
           this.shorter = false;
@@ -167,8 +180,9 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
     super.initState();
   }
 
+  ///Updates the number when notified.
   onNumberChanged() {
-    if(animationController.isAnimating){
+    if (animationController.isAnimating) {
       animationController.notifyStatusListeners(AnimationStatus.completed);
     }
     var num = widget.controller.number;
@@ -179,8 +193,7 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
 
     if (numString.length < currentNumString.length) {
       shorter = true;
-    }else if(numString.length > currentNumString.length){
-
+    } else if (numString.length > currentNumString.length) {
       digitControllers.insert(0, _DigitTickerController(num: 1));
 
       longer = true;
@@ -188,15 +201,15 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
 
     int startIndex = 0;
 
-    if(longer){
+    if (longer) {
       startIndex = 1;
     }
 
-
     for (int i = startIndex; i < numString.length; i++) {
-
       var digit = numString.codeUnitAt(i) - 48;
-      var oldDigit = longer ? currentNumString.codeUnitAt(i-1) - 48 : currentNumString.codeUnitAt(i) - 48;
+      var oldDigit = longer
+          ? currentNumString.codeUnitAt(i - 1) - 48
+          : currentNumString.codeUnitAt(i) - 48;
 
       if (digit >= 0 && digit != oldDigit) {
         digitControllers[i].number = digit;
@@ -215,46 +228,53 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    var width = widget.textStyle.fontSize*(7/10);
-    return AnimatedBuilder(animation: animationController, builder: (_, __){
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: longer ? (animationController.value) * width : width,
-              child: digitControllers.first == null
-                  ? Text(' ')
-                  : _DigitTicker(
-                  controller: digitControllers.first,
-                  duration: widget.duration,
-                  textStyle: widget.textStyle,
-                  initialNumber: currentNumString.codeUnitAt(0) - 48),
+    var width = widget.textStyle.fontSize * (7 / 10);
+    return AnimatedBuilder(
+        animation: animationController,
+        builder: (_, __) {
+          return Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: longer ? (animationController.value) * width : width,
+                  child: digitControllers.first == null
+                      ? Text(' ')
+                      : _DigitTicker(
+                          controller: digitControllers.first,
+                          duration: widget.duration,
+                          textStyle: widget.textStyle,
+                          initialNumber: currentNumString.codeUnitAt(0) - 48),
+                ),
+                for (int i = 1; i < digitControllers.length - 1; i++)
+                  digitControllers[i] == null
+                      ? Text(' ')
+                      : _DigitTicker(
+                          controller: digitControllers[i],
+                          duration: widget.duration,
+                          textStyle: widget.textStyle,
+                          initialNumber: i == currentNumString.length
+                              ? 0
+                              : (currentNumString.codeUnitAt(i) - 48)),
+                if (digitControllers.length > 1)
+                  Container(
+                    width: shorter
+                        ? (1 - animationController.value) * width
+                        : width,
+                    child: digitControllers.last == null
+                        ? Text(' ')
+                        : _DigitTicker(
+                            controller: digitControllers.last,
+                            duration: widget.duration,
+                            textStyle: widget.textStyle,
+                            initialNumber: currentNumString
+                                    .codeUnitAt(currentNumString.length - 1) -
+                                48),
+                  )
+              ],
             ),
-            for (int i = 1; i < digitControllers.length-1; i++)
-              digitControllers[i] == null
-                  ? Text(' ')
-                  : _DigitTicker(
-                  controller: digitControllers[i],
-                  duration: widget.duration,
-                  textStyle: widget.textStyle,
-                  initialNumber: i == currentNumString.length? 0 : (currentNumString.codeUnitAt(i) - 48)),
-            if (digitControllers.length > 1)
-              Container(
-                width: shorter ? (1-animationController.value) * width : width,
-                child: digitControllers.last == null
-                    ? Text(' ')
-                    : _DigitTicker(
-                    controller: digitControllers.last,
-                    duration: widget.duration,
-                    textStyle: widget.textStyle,
-                    initialNumber: currentNumString.codeUnitAt(currentNumString.length-1) - 48),
-              )
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 }
-

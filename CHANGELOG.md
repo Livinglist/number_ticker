@@ -1,3 +1,15 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1+3] - 03-04-2021.
 
-* TODO: Describe initial release.
+* Cleaned code.
+
+## [0.0.1+2] - 03-04-2021.
+
+* Updated CHANGELOG.md.
+
+## [0.0.1+1] - 03-04-2021.
+
+* Updated README.md.
+
+## [0.0.1] - 03-04-2021.
+
+* Initial release.

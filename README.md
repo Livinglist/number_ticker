@@ -1,5 +1,7 @@
 # Number Ticker
 [![pub package](https://img.shields.io/pub/v/number_ticker.svg)](https://pub.dartlang.org/packages/number_ticker)
+[![likes](https://badges.bar/number_ticker/likes)](https://pub.dev/packages/number_ticker/score)
+[![pub points](https://badges.bar/number_ticker/pub%20points)](https://pub.dev/packages/number_ticker/score)
 
 Number_ticker is a dart package that provides a Robinhood-like number ticker widget for displaying changing number.
 
