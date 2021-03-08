@@ -1,3 +1,7 @@
+## [0.0.1+5] - 03-07-2021.
+
+* Code format changes.
+
 ## [0.0.1+4] - 03-07-2021.
 
 * Added supports for custom background color, curve and duration.

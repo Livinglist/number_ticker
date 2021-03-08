@@ -23,16 +23,22 @@ class _DigitTickerController extends ValueNotifier {
 class _DigitTicker extends StatelessWidget {
   ///The color of background.
   final Color backgroundColor;
+
   ///The curve of scrolling animation.
   final Curve curve;
+
   ///The duration of animation.
   final Duration duration;
+
   ///The initial number to be displayed.
   final int initialNumber;
+
   ///The scrollController.
   final ScrollController scrollController;
+
   ///The textStyle of number displayed.
   final TextStyle textStyle;
+
   ///The controller of this widget.
   final _DigitTickerController controller;
 
@@ -43,7 +49,8 @@ class _DigitTicker extends StatelessWidget {
       this.textStyle,
       this.initialNumber,
       this.duration})
-      : scrollController = ScrollController(initialScrollOffset: textStyle.fontSize * (4 / 3) * initialNumber),
+      : scrollController = ScrollController(
+            initialScrollOffset: textStyle.fontSize * (4 / 3) * initialNumber),
         assert(controller != null, 'Controller cannot be null.'),
         assert(initialNumber != null, 'Initial number cannot be null.'),
         assert(initialNumber <= 9),
@@ -55,7 +62,10 @@ class _DigitTicker extends StatelessWidget {
   ///Scrolls to the positions of the new number.
   void onValueChanged() {
     if (this.scrollController.hasClients) {
-      scrollController.animateTo(controller.number * textStyle.fontSize * (4 / 3), duration: duration, curve: curve);
+      scrollController.animateTo(
+          controller.number * textStyle.fontSize * (4 / 3),
+          duration: duration,
+          curve: curve);
     }
   }
 
@@ -104,16 +114,22 @@ class NumberTickerController extends ValueNotifier {
 class NumberTicker extends StatefulWidget {
   ///The color of background.
   final Color backgroundColor;
+
   ///The curve of scrolling animation.
   final Curve curve;
+
   ///The initial number to be displayed, default is 0.
   final double initialNumber;
+
   ///The duration of animation.
   final Duration duration;
+
   ///The number of digits after decimal point.
   final int fractionDigits;
+
   ///The controller of this widget.
   final NumberTickerController controller;
+
   ///The text style of the number.
   final TextStyle textStyle;
 
@@ -136,7 +152,8 @@ class NumberTicker extends StatefulWidget {
 }
 
 ///The state of [NumberTicker].
-class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderStateMixin {
+class _NumberTickerState extends State<NumberTicker>
+    with SingleTickerProviderStateMixin {
   ///The animation controller for animating the removed or added [DigitTicker].
   AnimationController animationController;
 
@@ -157,7 +174,8 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
 
   @override
   void initState() {
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
 
     var num = widget.initialNumber;
     currentNum = num;
@@ -220,7 +238,9 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
 
     for (int i = startIndex; i < numString.length; i++) {
       var digit = numString.codeUnitAt(i) - 48;
-      var oldDigit = longer ? currentNumString.codeUnitAt(i - 1) - 48 : currentNumString.codeUnitAt(i) - 48;
+      var oldDigit = longer
+          ? currentNumString.codeUnitAt(i - 1) - 48
+          : currentNumString.codeUnitAt(i) - 48;
 
       if (digit >= 0 && digit != oldDigit) {
         digitControllers[i].number = digit;
@@ -270,10 +290,14 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
                           curve: widget.curve,
                           duration: widget.duration,
                           textStyle: widget.textStyle,
-                          initialNumber: i == currentNumString.length ? 0 : (currentNumString.codeUnitAt(i) - 48)),
+                          initialNumber: i == currentNumString.length
+                              ? 0
+                              : (currentNumString.codeUnitAt(i) - 48)),
                 if (digitControllers.length > 1)
                   Container(
-                    width: shorter ? (1 - animationController.value) * width : width,
+                    width: shorter
+                        ? (1 - animationController.value) * width
+                        : width,
                     child: digitControllers.last == null
                         ? Text(' ')
                         : _DigitTicker(
@@ -282,7 +306,9 @@ class _NumberTickerState extends State<NumberTicker> with SingleTickerProviderSt
                             curve: widget.curve,
                             duration: widget.duration,
                             textStyle: widget.textStyle,
-                            initialNumber: currentNumString.codeUnitAt(currentNumString.length - 1) - 48),
+                            initialNumber: currentNumString
+                                    .codeUnitAt(currentNumString.length - 1) -
+                                48),
                   )
               ],
             ),
