@@ -1,3 +1,7 @@
+## [0.0.1+4] - 03-07-2021.
+
+* Added supports for custom background color, curve and duration.
+
 ## [0.0.1+3] - 03-04-2021.
 
 * Cleaned code.

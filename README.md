@@ -5,7 +5,7 @@
 
 Number_ticker is a dart package that provides a Robinhood-like number ticker widget for displaying changing number.
 
-![m](https://user-images.githubusercontent.com/7277662/109929939-e5040680-7c7b-11eb-809a-53f84298cefd.gif)
+![m](https://user-images.githubusercontent.com/7277662/110279104-61089200-7f8d-11eb-973a-f747ebc7c77d.gif)
 
 ## Usage
 
