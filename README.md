@@ -75,3 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ```
 
+## TODO
+
+- [x] Support integer.
+- [ ] Support decimal.
+- [ ] Support negative number. 
