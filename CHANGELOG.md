@@ -1,3 +1,7 @@
+## [0.0.2] - 01-12-2022.
+
+* Migrated to null safety.
+
 ## [0.0.1+5] - 03-07-2021.
 
 * Code format changes.
