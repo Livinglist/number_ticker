@@ -132,13 +132,15 @@ class NumberTicker extends StatefulWidget {
   final TextStyle textStyle;
 
   NumberTicker(
-      {Key? key, this.backgroundColor = Colors.transparent,
+      {Key? key,
+      this.backgroundColor = Colors.transparent,
       this.curve = Curves.ease,
       required this.controller,
       this.textStyle = const TextStyle(color: Colors.black, fontSize: 12),
       required this.initialNumber,
       this.duration = const Duration(milliseconds: 300),
-      this.fractionDigits = 0}) : super(key: key) {
+      this.fractionDigits = 0})
+      : super(key: key) {
     controller.number = initialNumber;
   }
 
@@ -169,8 +171,8 @@ class _NumberTickerState extends State<NumberTicker>
 
   @override
   void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
 
     var num = widget.initialNumber;
     currentNum = num;
@@ -289,9 +291,8 @@ class _NumberTickerState extends State<NumberTicker>
                             : (currentNumString.codeUnitAt(i) - 48)),
               if (digitControllers.length > 1)
                 SizedBox(
-                  width: shorter
-                      ? (1 - animationController.value) * width
-                      : width,
+                  width:
+                      shorter ? (1 - animationController.value) * width : width,
                   child: digitControllers.last == null
                       ? const Text(' ')
                       : _DigitTicker(

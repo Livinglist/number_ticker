@@ -1,3 +1,7 @@
+## [0.0.2+1] - 01-12-2022.
+
+* Formatted code.
+
 ## [0.0.2] - 01-12-2022.
 
 * Migrated to null safety.
