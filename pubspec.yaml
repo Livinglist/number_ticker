@@ -1,12 +1,11 @@
 name: number_ticker
 description: Number_ticker provides a simple number ticker for displaying a changing number. You can use it to display the number that updates in real time for better user experience.
-version: 0.0.1+5
+version: 0.0.2
 repository: https://github.com/Livinglist/number_ticker
 publish_to: https://pub.dev/
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   flutter:
